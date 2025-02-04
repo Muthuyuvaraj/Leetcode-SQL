@@ -1,0 +1,10 @@
+
+WITH t AS (SELECT *,
+DENSE_RANK() OVER( PARTITION BY departmentId ORDER BY salary DESC
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS rank_1
+FROM Employee)
+SELECT d.name AS Department,t.name AS Employee,t.salary AS Salary
+FROM t 
+JOIN Department d
+ON t.departmentId= d.id
+WHERE rank_1<4
